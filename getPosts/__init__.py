@@ -22,5 +22,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except:
         return func.HttpResponse("Bad request.", status_code=400)
     except Exception as e:
-        logging.error(f"Error in getPosts: {e}", exc_info=True)
-        return func.HttpResponse(f"Error: {e}", status_code=500)
+        logging.error('Operational failure in getPosts: %s\n%s', e, traceback.format_exc())
+        return func.HttpResponse(f"Operational error: {e}", status_code=500)
