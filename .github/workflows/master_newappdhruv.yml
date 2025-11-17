@@ -39,10 +39,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install --target=".python_packages/lib/site-packages" -r requirements.txt
 
+      - name: Verify pymongo installation
+        run: |
+          ls -la .python_packages/lib/site-packages/ | grep pymongo || echo "pymongo not found!"
+          
       # Optional: Add step to run tests here
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: |
+          zip -r release.zip . -x "venv/*" -x ".venv/*" -x ".git/*"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -74,5 +79,4 @@ jobs:
           app-name: 'newappdhruv'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4FF70DC3328A4024B4B43A4612846E6B }}
